@@ -78,7 +78,7 @@ Future<void> _downloadCV() async {
     final activeSection = ref.watch(activeSectionProvider);
     final scrollNotifier = ref.read(scrollNotifierProvider);
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 1150;
+    final isDesktop = screenWidth > 800;
 
     return Center(
       child: ConstrainedBox(
@@ -99,148 +99,155 @@ Future<void> _downloadCV() async {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Brand Logo
-                    InkWell(
-                      onTap: () {
-                        ref.read(activeSectionProvider.notifier).state = 'Home';
-                        scrollNotifier.scrollToSection('Home');
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryEmerald.withOpacity(0.2),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppTheme.primaryEmerald.withOpacity(0.4),
-                              ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                "assets/me.jpeg",
-                                width: 16,
-                                height: 16,
-                              ),
+                // Brand Logo (Flexible)
+                Flexible(
+                  flex: 2,
+                  child: InkWell(
+                    onTap: () {
+                      ref.read(activeSectionProvider.notifier).state = 'Home';
+                      scrollNotifier.scrollToSection('Home');
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryEmerald.withOpacity(0.2),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppTheme.primaryEmerald.withOpacity(0.4),
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          RichText(
-                            text: TextSpan(
-                              text: "Waqas",
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: -0.5,
-                                  ),
-                              children: const [
-                                TextSpan(
-                                  text: ".",
-                                  style: TextStyle(
-                                    color: AppTheme.accentEmerald,
-                                    fontSize: 26,
-                                  ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              "assets/me.jpeg",
+                              width: 16,
+                              height: 16,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        RichText(
+                          text: TextSpan(
+                            text: "Waqas",
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.5,
                                 ),
-                              ],
-                            ),
+                            children: const [
+                              TextSpan(
+                                text: ".",
+                                style: TextStyle(
+                                  color: AppTheme.accentEmerald,
+                                  fontSize: 26,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
+                ),
 
                     // Navigation Links (Desktop)
                     if (isDesktop)
-                      Row(
-                        children: _navItems.map((item) {
-                          final isActive = activeSection == item;
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: TextButton(
-                              onPressed: () {
-                                ref.read(activeSectionProvider.notifier).state =
-                                    item;
-                                scrollNotifier.scrollToSection(item);
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: isActive
-                                    ? AppTheme.accentEmerald
-                                    : Colors.white70,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontWeight: isActive
-                                          ? FontWeight.w600
-                                          : FontWeight.w400,
-                                    ),
-                                  ),
-                                  if (isActive)
-                                    Container(
-                                      margin: const EdgeInsets.only(top: 4),
-                                      width: 4,
-                                      height: 4,
-                                      decoration: const BoxDecoration(
-                                        color: AppTheme.accentEmerald,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    )
-                                  else
-                                    const SizedBox(height: 8),
-                                ],
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                    // Actions / Menu Toggle
-                    Row(
-                      children: [
-                        if (isDesktop)
-                          ElevatedButton.icon(
-                            onPressed: _downloadCV,
-                            icon: const Icon(Icons.download_rounded, size: 18),
-                            label: const Text("Download CV"),
-                            style:
-                                ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primaryEmerald,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shadowColor: AppTheme.accentEmerald
-                                      .withOpacity(0.5),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _navItems.map((item) {
+                            final isActive = activeSection == item;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: TextButton(
+                                onPressed: () {
+                                  ref.read(activeSectionProvider.notifier).state =
+                                      item;
+                                  scrollNotifier.scrollToSection(item);
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: isActive
+                                      ? AppTheme.accentEmerald
+                                      : Colors.white70,
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
+                                    horizontal: 16,
                                     vertical: 12,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ).copyWith(
-                                  elevation: ButtonStyleButton.allOrNull(0),
                                 ),
-                          )
-                        else
-                          IconButton(
-                            onPressed: _toggleMobileMenu,
-                            icon: AnimatedIcon(
-                              icon: AnimatedIcons.menu_close,
-                              progress: _menuController,
-                              color: Colors.white,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      item,
+                                      style: TextStyle(
+                                        fontWeight: isActive
+                                            ? FontWeight.w600
+                                            : FontWeight.w400,
+                                      ),
+                                    ),
+                                    if (isActive)
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 4),
+                                        width: 4,
+                                        height: 4,
+                                        decoration: const BoxDecoration(
+                                          color: AppTheme.accentEmerald,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      )
+                                    else
+                                      const SizedBox(height: 8),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                // Actions / Menu Toggle (Flexible)
+                Flexible(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (isDesktop)
+                        ElevatedButton.icon(
+                          onPressed: _downloadCV,
+                          icon: const Icon(Icons.download_rounded, size: 18),
+                          label: const Text("Download CV"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primaryEmerald,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shadowColor: AppTheme.accentEmerald.withOpacity(0.5),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
                             ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ).copyWith(
+                            elevation: ButtonStyleButton.allOrNull(0),
                           ),
-                      ],
-                    ),
+                        )
+                      else
+                        IconButton(
+                          onPressed: _toggleMobileMenu,
+                          icon: AnimatedIcon(
+                            icon: AnimatedIcons.menu_close,
+                            progress: _menuController,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
                   ],
                 ),
               ),
