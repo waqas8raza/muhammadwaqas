@@ -27,7 +27,7 @@ jobs:
       - name: Build Web
         # The base-href is set to '/' for user pages (username.github.io). 
         # If deploying to a project page (username.github.io/repo-name/), change this to '/repo-name/'
-        run: flutter build web --release --base-href "/portfolio/"
+        run: flutter build web --release --base-href "/muhammadwaqas/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
