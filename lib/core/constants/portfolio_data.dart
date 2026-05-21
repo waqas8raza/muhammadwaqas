@@ -298,5 +298,5 @@ class PortfolioData {
   static const String email = "dev.mwaqas887@gmail.com";
   static const String github = "https://github.com/waqas8raza";
   static const String linkedin = "https://linkedin.com/in/muhammadwaqasflutter";
-  static const String whatsapp = "https://wa.me/92349286687"; // standard format
+  static const String whatsapp = "https://wa.me/923492286687"; // standard format
 }
