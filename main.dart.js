@@ -91700,7 +91700,7 @@ A.apZ.prototype={
 $0(){return this.a.tM("mailto:dev.mwaqas887@gmail.com")},
 $S:0}
 A.aq_.prototype={
-$0(){return this.a.tM("https://wa.me/92349286687")},
+$0(){return this.a.tM("https://wa.me/923492286687")},
 $S:0}
 A.aq0.prototype={
 $1(a){var s=B.d.jT(a)
@@ -91769,7 +91769,7 @@ s=A.X(a).ok.w
 r=t.p
 n=A.b([A.cy(A.b([A.d0(A.b([m,B.fB,A.Dl(q,q,q,B.cv,q,q,!0,q,A.dc(B.LC,q,q,q,q,q,q,q,q,s==null?q:s.aoe(B.e,16,B.cL,-0.5),"Waqas"),B.aO,q,q,B.ag,B.aY)],r),B.B,B.w,B.aU,0),B.bb,A.bL("\xa9 "+A.aIk(new A.jt(Date.now(),0,!1))+" Muhammad Waqas. All rights reserved.",q,q,q,B.a00,q,q)],r),n,B.w,B.x)],r)
 if(!p)n.push(B.ct)
-n.push(A.d0(A.b([this.Dt(B.hG,"GitHub","https://github.com/waqas8raza"),B.c9,this.Dt(B.l0,"LinkedIn",u.W),B.c9,this.Dt(B.HO,"WhatsApp","https://wa.me/92349286687"),B.AH,new A.fe(new A.a8x(b),1.1,B.bD,q)],r),B.B,B.w,B.aU,0))
+n.push(A.d0(A.b([this.Dt(B.hG,"GitHub","https://github.com/waqas8raza"),B.c9,this.Dt(B.l0,"LinkedIn",u.W),B.c9,this.Dt(B.HO,"WhatsApp","https://wa.me/923492286687"),B.AH,new A.fe(new A.a8x(b),1.1,B.bD,q)],r),B.B,B.w,B.aU,0))
 return A.bA(q,A.du(new A.d8(B.cG,new A.bP(B.GY,A.Nb(n,B.B,o,q,B.dY,B.x,0,q,q,B.bG),q),q),q,q),B.o,q,q,B.CN,q,q,q,q,B.GI,q,q,q)},
 Dt(a,b,c){return new A.fe(new A.a8v(this,c,b,a),1.1,B.bD,null)}}
 A.a8x.prototype={
@@ -91868,7 +91868,7 @@ f=A.mo(A.bL("Building scalable, modern, and high-performance mobile applications
 e=o.a
 d=A.aD9(B.BC,A.b([new A.fe(new A.asa(e),1.05,B.bD,n),new A.fe(new A.asb(e),1.05,B.bD,n)],c),16,16)
 s=k?B.w:B.dm
-r=new A.ka(A.cy(A.aFp(new A.asc(),A.b([h,B.ct,i,B.bb,g,B.bv,f,B.iK,d,B.fC,A.d0(A.b([e.Dw(B.p2,"GitHub","https://github.com/waqas8raza"),B.dt,e.Dw(B.l0,"LinkedIn",u.W),B.dt,e.Dw(B.I3,"WhatsApp","https://wa.me/92349286687")],c),B.B,s,B.x,0)],c),B.d7),j,B.w,B.aU),n)
+r=new A.ka(A.cy(A.aFp(new A.asc(),A.b([h,B.ct,i,B.bb,g,B.bv,f,B.iK,d,B.fC,A.d0(A.b([e.Dw(B.p2,"GitHub","https://github.com/waqas8raza"),B.dt,e.Dw(B.l0,"LinkedIn",u.W),B.dt,e.Dw(B.I3,"WhatsApp","https://wa.me/923492286687")],c),B.B,s,B.x,0)],c),B.d7),j,B.w,B.aU),n)
 j=A.bA(n,n,B.o,n,n,new A.c2(n,n,A.ne(A.U(38,B.n.m()>>>16&255,B.n.m()>>>8&255,B.n.m()&255),1.5),n,n,n,B.b_),n,320,n,n,n,n,n,320)
 s=A.bA(n,n,B.o,n,n,new A.c2(n,n,A.ne(A.U(B.c.aA(76.5),B.m.m()>>>16&255,B.m.m()>>>8&255,B.m.m()&255),2.5),n,n,n,B.b_),n,280,n,n,n,n,n,280)
 d=A.bQ(120)
