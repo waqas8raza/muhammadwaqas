@@ -106,6 +106,7 @@ Future<void> _downloadCV() async {
                         scrollNotifier.scrollToSection('Home');
                       },
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
                             padding: const EdgeInsets.all(8),
@@ -206,6 +207,7 @@ Future<void> _downloadCV() async {
 
                     // Actions / Menu Toggle
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         if (isDesktop)
                           ElevatedButton.icon(

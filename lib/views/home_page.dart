@@ -138,7 +138,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             left: 0,
             right: 0,
             child: Container(
-              height: 100,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
