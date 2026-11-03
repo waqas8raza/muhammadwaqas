@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/portfolio_data.dart';
 import '../../providers/portfolio_providers.dart';
-import '../../widgets/hover_item.dart';
 
 class Footer extends ConsumerWidget {
   const Footer({super.key});
@@ -18,139 +18,120 @@ class Footer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 760;
-
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40),
       decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.white10, width: 1)),
+        color: AppTheme.surface,
+        border: Border(
+          top: BorderSide(color: AppTheme.border, width: 1),
+        ),
       ),
+      padding: const EdgeInsets.symmetric(vertical: 36),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Flex(
-              direction: isDesktop ? Axis.horizontal : Axis.vertical,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 20,
+              spacing: 20,
               children: [
-                // Brand and Copyright
-                Column(
-                  crossAxisAlignment: isDesktop
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center,
+                // Brand & Copyright
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppTheme.primaryEmerald.withOpacity(0.15),
-                            shape: BoxShape.circle,
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.asset(
+                          PortfolioData.profileImage,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.terminal,
+                            size: 14,
+                            color: AppTheme.accent,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              "assets/me.jpeg",
-                              width: 14,
-                              height: 14,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "MUHAMMAD WAQAS",
+                              style: GoogleFonts.plusJakartaSans(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 13,
+                                letterSpacing: 0.5,
+                                color: AppTheme.textPrimary,
+                              ),
+                              children: const [
+                                TextSpan(
+                                  text: " — PORTFOLIO",
+                                  style: TextStyle(
+                                    color: AppTheme.accent,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        RichText(
-                          text: TextSpan(
-                            text: "Waqas",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 16,
-                                  letterSpacing: -0.5,
-                                  color: Colors.white,
-                                ),
-                            children: const [
-                              TextSpan(
-                                text: ".",
-                                style: TextStyle(
-                                  color: AppTheme.accentEmerald,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(height: 2),
+                          Text(
+                            "© ${DateTime.now().year} Muhammad Waqas. All rights reserved.",
+                            style: GoogleFonts.jetBrainsMono(
+                              color: AppTheme.textMuted,
+                              fontSize: 11,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "© ${DateTime.now().year} Muhammad Waqas. All rights reserved.",
-                      style: const TextStyle(
-                        color: AppTheme.textMuted,
-                        fontSize: 12,
+                        ],
                       ),
                     ),
                   ],
                 ),
 
-                if (!isDesktop) const SizedBox(height: 24),
-
-                // Back to Top and social buttons
-                Row(
-                  mainAxisSize: MainAxisSize.min,
+                // Social Channels & Back to Top
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    _buildFooterSocialButton(
-                      icon: Icons.code,
-                      tooltip: "GitHub",
-                      url: PortfolioData.github,
-                    ),
-                    const SizedBox(width: 12),
-                    _buildFooterSocialButton(
-                      icon: Icons.chat_bubble_outline_rounded,
-                      tooltip: "LinkedIn",
-                      url: PortfolioData.linkedin,
-                    ),
-                    const SizedBox(width: 12),
-                    _buildFooterSocialButton(
-                      icon: Icons.phone_android,
-                      tooltip: "WhatsApp",
-                      url: PortfolioData.whatsapp,
-                    ),
-                    const SizedBox(width: 24),
-                    // Back to Top Button
-                    HoverItem(
-                      scale: 1.1,
-                      builder: (context, isHovered) =>
-                          FloatingActionButton.small(
-                            onPressed: () {
-                              ref
-                                  .read(scrollNotifierProvider)
-                                  .scrollToSection('Home');
-                              ref.read(activeSectionProvider.notifier).state =
-                                  'Home';
-                            },
-                            backgroundColor: isHovered
-                                ? AppTheme.primaryEmerald
-                                : Colors.white.withOpacity(0.04),
-                            foregroundColor: isHovered
-                                ? Colors.white
-                                : Colors.white60,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                color: isHovered
-                                    ? AppTheme.accentEmerald.withOpacity(0.3)
-                                    : Colors.white.withOpacity(0.08),
-                              ),
-                            ),
-                            elevation: 0,
-                            child: const Icon(
-                              Icons.arrow_upward_rounded,
-                              size: 18,
-                            ),
-                          ),
+                    _buildFooterLink("GitHub", PortfolioData.github),
+                    _buildFooterLink("LinkedIn", PortfolioData.linkedin),
+                    _buildFooterLink("WhatsApp", PortfolioData.whatsapp),
+                    const SizedBox(width: 6),
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(scrollNotifierProvider)
+                            .scrollToSection('Home');
+                        ref.read(activeSectionProvider.notifier).state =
+                            'Home';
+                      },
+                      tooltip: "Back to Top",
+                      icon: const Icon(
+                        Icons.arrow_upward_rounded,
+                        size: 16,
+                        color: AppTheme.textPrimary,
+                      ),
+                      style: IconButton.styleFrom(
+                        backgroundColor: AppTheme.surfaceSubtle,
+                        side: const BorderSide(color: AppTheme.border),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -162,29 +143,35 @@ class Footer extends ConsumerWidget {
     );
   }
 
-  Widget _buildFooterSocialButton({
-    required IconData icon,
-    required String tooltip,
-    required String url,
-  }) {
-    return HoverItem(
-      scale: 1.1,
-      builder: (context, isHovered) => IconButton(
-        onPressed: () => _launchUrl(url),
-        tooltip: tooltip,
-        icon: Icon(
-          icon,
-          size: 18,
-          color: isHovered ? AppTheme.accentEmerald : Colors.white60,
+  Widget _buildFooterLink(String label, String url) {
+    return InkWell(
+      onTap: () => _launchUrl(url),
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceSubtle,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: AppTheme.border),
         ),
-        style: IconButton.styleFrom(
-          backgroundColor: Colors.white.withOpacity(0.02),
-          padding: const EdgeInsets.all(10),
-          side: BorderSide(
-            color: isHovered
-                ? AppTheme.primaryEmerald.withOpacity(0.3)
-                : Colors.white.withOpacity(0.05),
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(
+              Icons.arrow_outward_rounded,
+              size: 11,
+              color: AppTheme.textMuted,
+            ),
+          ],
         ),
       ),
     );

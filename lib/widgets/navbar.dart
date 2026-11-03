@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:universal_html/html.dart' as html;
 import '../core/theme/app_theme.dart';
 import '../providers/portfolio_providers.dart';
-import 'glass_container.dart';
 
 class Navbar extends ConsumerStatefulWidget implements PreferredSizeWidget {
   const Navbar({super.key});
@@ -16,7 +12,7 @@ class Navbar extends ConsumerStatefulWidget implements PreferredSizeWidget {
   ConsumerState<Navbar> createState() => _NavbarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(80);
+  Size get preferredSize => const Size.fromHeight(74);
 }
 
 class _NavbarState extends ConsumerState<Navbar>
@@ -25,14 +21,13 @@ class _NavbarState extends ConsumerState<Navbar>
   late AnimationController _menuController;
   late Animation<double> _menuAnimation;
 
-  final List<String> _navItems = [
-    'Home',
-    'About',
-    'Skills',
-    'Experience',
-    'Projects',
-    'Tech',
-    'Contact',
+  final List<Map<String, String>> _navItems = [
+    {'label': 'Overview', 'key': 'Home'},
+    {'label': 'Projects', 'key': 'Projects'},
+    {'label': 'Skills', 'key': 'Skills'},
+    {'label': 'Experience', 'key': 'Experience'},
+    {'label': 'About', 'key': 'About'},
+    {'label': 'Contact', 'key': 'Contact'},
   ];
 
   @override
@@ -40,11 +35,11 @@ class _NavbarState extends ConsumerState<Navbar>
     super.initState();
     _menuController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 250),
     );
     _menuAnimation = CurvedAnimation(
       parent: _menuController,
-      curve: Curves.easeInOutBack,
+      curve: Curves.easeInOut,
     );
   }
 
@@ -65,254 +60,295 @@ class _NavbarState extends ConsumerState<Navbar>
     });
   }
 
-Future<void> _downloadCV() async {
+  void _downloadCV() {
     const url =
-        "https://raw.githubusercontent.com/waqas8raza/portfoliodata/main/MuhammadWaqasResume.pdf";
-
+        "https://raw.githubusercontent.com/waqas8raza/portfoliodata/main/Muhammad_Waqas_Flutter_Developer (1).pdf";
     html.AnchorElement(href: url)
       ..setAttribute("download", "MuhammadWaqasResume.pdf")
       ..click();
   }
+
   @override
   Widget build(BuildContext context) {
     final activeSection = ref.watch(activeSectionProvider);
     final scrollNotifier = ref.read(scrollNotifierProvider);
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 1150;
+    final isDesktop = screenWidth > 960;
 
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1200),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: isDesktop ? 20 : 12,
+            vertical: 10,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GlassContainer(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 8,
+              Container(
+                height: 58,
+                padding: EdgeInsets.symmetric(horizontal: isDesktop ? 20 : 14),
+                decoration: BoxDecoration(
+                  color: AppTheme.surface.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.border, width: 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF141518).withValues(alpha: 0.04),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(50),
-                opacity: 0.1,
-                bgColor: AppTheme.background.withOpacity(0.4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Brand Logo
-                    InkWell(
-                      onTap: () {
-                        ref.read(activeSectionProvider.notifier).state = 'Home';
-                        scrollNotifier.scrollToSection('Home');
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryEmerald.withOpacity(0.2),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppTheme.primaryEmerald.withOpacity(0.4),
+                    // Brand / Logo
+                    Flexible(
+                      child: InkWell(
+                        onTap: () {
+                          scrollNotifier.scrollToSection('Home');
+                          ref.read(activeSectionProvider.notifier).state =
+                              'Home';
+                        },
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: AppTheme.surfaceSubtle,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: AppTheme.border),
                               ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                "assets/me.jpeg",
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          RichText(
-                            text: TextSpan(
-                              text: "Waqas",
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: -0.5,
-                                  ),
-                              children: const [
-                                TextSpan(
-                                  text: ".",
-                                  style: TextStyle(
-                                    color: AppTheme.accentEmerald,
-                                    fontSize: 26,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Image.asset(
+                                  "assets/me.jpeg",
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) => const Icon(
+                                    Icons.terminal,
+                                    size: 16,
+                                    color: AppTheme.accent,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Flexible(
+                              child: RichText(
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  text: "M. WAQAS",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 15,
+                                    letterSpacing: 0.6,
+                                    color: AppTheme.textPrimary,
+                                  ),
+                                  children: const [
+                                    TextSpan(
+                                      text: " / DEV",
+                                      style: TextStyle(
+                                        color: AppTheme.accent,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
-                    // Navigation Links (Desktop)
-                    if (isDesktop)
-                      Row(
-                        children: _navItems.map((item) {
-                          final isActive = activeSection == item;
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: TextButton(
-                              onPressed: () {
-                                ref.read(activeSectionProvider.notifier).state =
-                                    item;
-                                scrollNotifier.scrollToSection(item);
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: isActive
-                                    ? AppTheme.accentEmerald
-                                    : Colors.white70,
+                    // Desktop Navigation Links
+                    if (isDesktop) ...[
+                      Flexible(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: _navItems.map((item) {
+                              final isSelected = activeSection == item['key'];
+                              return Padding(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
+                                  horizontal: 4,
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontWeight: isActive
-                                          ? FontWeight.w600
-                                          : FontWeight.w400,
+                                child: InkWell(
+                                  onTap: () {
+                                    scrollNotifier.scrollToSection(
+                                      item['key']!,
+                                    );
+                                    ref
+                                            .read(
+                                              activeSectionProvider.notifier,
+                                            )
+                                            .state =
+                                        item['key']!;
+                                  },
+                                  borderRadius: BorderRadius.circular(6),
+                                  hoverColor: AppTheme.surfaceSubtle,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    child: Text(
+                                      item['label']!,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 13,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w500,
+                                        color: isSelected
+                                            ? AppTheme.accent
+                                            : AppTheme.textSecondary,
+                                      ),
                                     ),
                                   ),
-                                  if (isActive)
-                                    Container(
-                                      margin: const EdgeInsets.only(top: 4),
-                                      width: 4,
-                                      height: 4,
-                                      decoration: const BoxDecoration(
-                                        color: AppTheme.accentEmerald,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    )
-                                  else
-                                    const SizedBox(height: 8),
-                                ],
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                    // Actions / Menu Toggle
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (isDesktop)
-                          ElevatedButton.icon(
-                            onPressed: _downloadCV,
-                            icon: const Icon(Icons.download_rounded, size: 18),
-                            label: const Text("Download CV"),
-                            style:
-                                ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primaryEmerald,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shadowColor: AppTheme.accentEmerald
-                                      .withOpacity(0.5),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ).copyWith(
-                                  elevation: ButtonStyleButton.allOrNull(0),
                                 ),
-                          )
-                        else
-                          IconButton(
-                            onPressed: _toggleMobileMenu,
-                            icon: AnimatedIcon(
-                              icon: AnimatedIcons.menu_close,
-                              progress: _menuController,
-                              color: Colors.white,
-                            ),
+                              );
+                            }).toList(),
                           ),
-                      ],
-                    ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+
+                      // Desktop Action Button (Resume)
+                      OutlinedButton.icon(
+                        onPressed: _downloadCV,
+                        icon: const Icon(
+                          Icons.arrow_downward_rounded,
+                          size: 14,
+                        ),
+                        label: const Text("Resume"),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.textPrimary,
+                          backgroundColor: AppTheme.surfaceSubtle,
+                          side: const BorderSide(color: AppTheme.border),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          textStyle: GoogleFonts.plusJakartaSans(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ] else ...[
+                      // Mobile Menu Hamburger Button
+                      IconButton(
+                        onPressed: _toggleMobileMenu,
+                        icon: Icon(
+                          _isMobileMenuOpen
+                              ? Icons.close_rounded
+                              : Icons.menu_rounded,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
 
-              // Mobile Menu Expandable Panel
-              if (!isDesktop && _isMobileMenuOpen)
+              // Mobile Navigation Menu Dropdown
+              if (!isDesktop)
                 SizeTransition(
                   sizeFactor: _menuAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: GlassContainer(
-                      padding: const EdgeInsets.all(16),
-                      borderRadius: BorderRadius.circular(24),
-                      opacity: 0.15,
-                      bgColor: AppTheme.background.withOpacity(0.85),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ..._navItems.map((item) {
-                            final isActive = activeSection == item;
-                            return ListTile(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppTheme.border),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(
+                            0xFF141518,
+                          ).withValues(alpha: 0.06),
+                          blurRadius: 18,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ..._navItems.map((item) {
+                          final isSelected = activeSection == item['key'];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: InkWell(
                               onTap: () {
                                 _toggleMobileMenu();
+                                scrollNotifier.scrollToSection(item['key']!);
                                 ref.read(activeSectionProvider.notifier).state =
-                                    item;
-                                scrollNotifier.scrollToSection(item);
+                                    item['key']!;
                               },
-                              title: Text(
-                                item,
-                                style: TextStyle(
-                                  color: isActive
-                                      ? AppTheme.accentEmerald
-                                      : Colors.white,
-                                  fontWeight: isActive
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                              trailing: isActive
-                                  ? const Icon(
-                                      Icons.chevron_right,
-                                      color: AppTheme.accentEmerald,
-                                    )
-                                  : null,
-                            );
-                          }),
-                          const Divider(color: Colors.white10),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                _toggleMobileMenu();
-                                _downloadCV();
-                              },
-                              icon: const Icon(Icons.download_rounded),
-                              label: const Text("Download CV"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppTheme.primaryEmerald,
-                                foregroundColor: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
+                                  horizontal: 14,
+                                  vertical: 10,
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppTheme.accentLight
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  item['label']!,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w700
+                                        : FontWeight.w500,
+                                    color: isSelected
+                                        ? AppTheme.accent
+                                        : AppTheme.textPrimary,
+                                  ),
                                 ),
                               ),
                             ),
+                          );
+                        }),
+                        const Divider(height: 20),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            _toggleMobileMenu();
+                            _downloadCV();
+                          },
+                          icon: const Icon(
+                            Icons.arrow_downward_rounded,
+                            size: 16,
                           ),
-                        ],
-                      ),
+                          label: const Text("Download Resume (PDF)"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.accent,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            textStyle: GoogleFonts.plusJakartaSans(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

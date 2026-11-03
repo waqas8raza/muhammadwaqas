@@ -36,10 +36,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.dispose();
   }
 
-  // Scroll spy algorithm to determine which section is closest to the top of the viewport
+  // Scroll spy algorithm to determine which section is closest to the top
   void _onScroll() {
     if (!_scrollController.hasClients) return;
-    
+
     final scrollNotifier = ref.read(scrollNotifierProvider);
     final activeSectionNotifier = ref.read(activeSectionProvider.notifier);
 
@@ -50,11 +50,10 @@ class _HomePageState extends ConsumerState<HomePage> {
       final context = key.currentContext;
       if (context != null) {
         final box = context.findRenderObject() as RenderBox?;
-        if (box != null) {
-          // Get the vertical distance from the top of the viewport
+        if (box != null && box.hasSize) {
           final position = box.localToGlobal(Offset.zero);
-          final distance = position.dy.abs();
-          
+          final distance = (position.dy - 80).abs();
+
           if (distance < minDistance) {
             minDistance = distance;
             activeSection = section;
@@ -80,7 +79,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Positioned.fill(
             child: SingleChildScrollView(
               controller: _scrollController,
-              padding: const EdgeInsets.only(top: 80), // push content below navbar
+              padding: const EdgeInsets.only(top: 84), // below floating navbar
               child: Column(
                 children: [
                   // Hero Section
@@ -88,43 +87,43 @@ class _HomePageState extends ConsumerState<HomePage> {
                     key: scrollNotifier.keys['Home'],
                     child: const HeroSection(),
                   ),
-                  
-                  // About Section
+
+                  // Projects Section (First main focus)
                   Container(
-                    key: scrollNotifier.keys['About'],
-                    child: const AboutSection(),
+                    key: scrollNotifier.keys['Projects'],
+                    child: const ProjectsSection(),
                   ),
-                  
-                  // Skills Section
+
+                  // Skills & Capabilities Section
                   Container(
                     key: scrollNotifier.keys['Skills'],
                     child: const SkillsSection(),
                   ),
-                  
+
+                  // Tech Stack / Everyday Toolchain Section
+                  Container(
+                    key: scrollNotifier.keys['Tech'],
+                    child: const TechStackSection(),
+                  ),
+
                   // Experience Section
                   Container(
                     key: scrollNotifier.keys['Experience'],
                     child: const ExperienceSection(),
                   ),
-                  
-                  // Projects Section
+
+                  // About & Engineering Philosophy Section
                   Container(
-                    key: scrollNotifier.keys['Projects'],
-                    child: const ProjectsSection(),
+                    key: scrollNotifier.keys['About'],
+                    child: const AboutSection(),
                   ),
-                  
-                  // Tech Stack Section
-                  Container(
-                    key: scrollNotifier.keys['Tech'],
-                    child: const TechStackSection(),
-                  ),
-                  
+
                   // Contact Section
                   Container(
                     key: scrollNotifier.keys['Contact'],
                     child: const ContactSection(),
                   ),
-                  
+
                   // Footer
                   const Footer(),
                 ],
@@ -132,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
 
-          // Sticky responsive navbar floating on top
+          // Sticky editorial navbar floating on top
           Positioned(
             top: 0,
             left: 0,
@@ -141,8 +140,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.background.withOpacity(0.95),
-                    AppTheme.background.withOpacity(0.0),
+                    AppTheme.background.withValues(alpha: 0.95),
+                    AppTheme.background.withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

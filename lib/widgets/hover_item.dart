@@ -4,12 +4,14 @@ class HoverItem extends StatefulWidget {
   final Widget Function(BuildContext context, bool isHovered) builder;
   final double scale;
   final Offset offset;
+  final Duration duration;
 
   const HoverItem({
     super.key,
     required this.builder,
-    this.scale = 1.03,
-    this.offset = const Offset(0, -4),
+    this.scale = 1.015,
+    this.offset = const Offset(0, -3),
+    this.duration = const Duration(milliseconds: 200),
   });
 
   @override
@@ -21,18 +23,22 @@ class _HoverItemState extends State<HoverItem> {
 
   @override
   Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+    final matrix = Matrix4.identity();
+    if (!reduceMotion && _isHovered) {
+      matrix.translateByDouble(widget.offset.dx, widget.offset.dy, 0.0, 1.0);
+      matrix.scaleByDouble(widget.scale, widget.scale, 1.0, 1.0);
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
+        duration: reduceMotion ? Duration.zero : widget.duration,
         curve: Curves.easeOutCubic,
-        transform: _isHovered
-            ? (Matrix4.identity()
-              ..translate(widget.offset.dx, widget.offset.dy)
-              ..scale(widget.scale))
-            : Matrix4.identity(),
+        transform: matrix,
         child: widget.builder(context, _isHovered),
       ),
     );

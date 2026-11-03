@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/portfolio_data.dart';
-import '../../widgets/glass_container.dart';
 import '../../widgets/hover_item.dart';
 
 class TechStackSection extends StatelessWidget {
@@ -11,127 +10,154 @@ class TechStackSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 1150;
-    final isMobile = screenWidth < 600;
-
-    int crossAxisCount = 4;
-    if (isDesktop) {
-      crossAxisCount = 6;
-    } else if (screenWidth > 800) {
-      crossAxisCount = 4;
-    } else if (screenWidth > 500) {
-      crossAxisCount = 3;
-    } else {
-      crossAxisCount = 2;
-    }
+    final isDesktop = screenWidth > 960;
+    final isMobile = screenWidth <= 640;
 
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1100),
+        constraints: const BoxConstraints(maxWidth: 1200),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 64 : 24,
-            vertical: 80,
+            horizontal: isDesktop ? 48 : 24,
+            vertical: isDesktop ? 48 : 36,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Section Header
-              Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 2,
-                    color: AppTheme.accentEmerald,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    "STACK",
-                    style: TextStyle(
-                      color: AppTheme.accentEmerald,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
+          child: Container(
+            padding: EdgeInsets.all(isDesktop ? 36 : 24),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppTheme.border),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "PRODUCTION TOOLCHAIN",
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.accent,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            "Everyday Development Stack",
+                            style: GoogleFonts.newsreader(
+                              fontSize: isMobile ? 22 : 28,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.textPrimary,
+                              letterSpacing: -0.4,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    if (isDesktop) ...[
+                      const SizedBox(width: 16),
+                      Text(
+                        "12 Core Technologies",
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: 12,
+                          color: AppTheme.textMuted,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Frameworks, protocols, and developer toolchains actively leveraged across client and production builds.",
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppTheme.textSecondary,
+                    fontSize: 14,
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "Technologies",
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontSize: isMobile ? 28 : 36,
-                      fontWeight: FontWeight.w800,
-                    ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "A curated list of frameworks, tools, and platforms that I use to design and deploy high-performance applications.",
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 15),
-              ),
-              const SizedBox(height: 48),
+                ),
+                const SizedBox(height: 28),
 
-              // Animated Tech Badge Grid
-              AnimationLimiter(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    mainAxisExtent: 110,
-                  ),
-                  itemCount: PortfolioData.technologies.length,
-                  itemBuilder: (context, index) {
-                    final tech = PortfolioData.technologies[index];
-                    final IconData icon = tech["icon"];
-                    final String name = tech["name"];
+                // Grid of Tech Items
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final int cols = isDesktop
+                        ? 6
+                        : screenWidth > 640
+                            ? 4
+                            : 2;
+                    final double itemWidth =
+                        (constraints.maxWidth - ((cols - 1) * 12)) / cols;
 
-                    return AnimationConfiguration.staggeredGrid(
-                      position: index,
-                      duration: const Duration(milliseconds: 500),
-                      columnCount: crossAxisCount,
-                      child: ScaleAnimation(
-                        child: FadeInAnimation(
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: PortfolioData.technologies.map((tech) {
+                        final IconData icon = tech["icon"];
+                        final String name = tech["name"];
+
+                        return SizedBox(
+                          width: itemWidth,
                           child: HoverItem(
-                            scale: 1.05,
-                            builder: (context, isHovered) => GlassContainer(
-                              padding: const EdgeInsets.all(16),
-                              borderRadius: BorderRadius.circular(16),
-                              opacity: isHovered ? 0.12 : 0.06,
-                              borderColor: isHovered
-                                  ? AppTheme.accentEmerald.withOpacity(0.4)
-                                  : Colors.white.withOpacity(0.08),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            scale: 1.02,
+                            offset: const Offset(0, -2),
+                            builder: (context, isHovered) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 14,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isHovered
+                                    ? AppTheme.accentLight
+                                    : AppTheme.surface,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isHovered
+                                      ? AppTheme.accentBorder
+                                      : AppTheme.border,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
                                     icon,
-                                    size: 32,
-                                    color: isHovered ? AppTheme.accentEmerald : Colors.white70,
+                                    size: 16,
+                                    color: isHovered
+                                        ? AppTheme.accent
+                                        : AppTheme.textSecondary,
                                   ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    name,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: isHovered ? Colors.white : AppTheme.textPrimary,
-                                      fontWeight: isHovered ? FontWeight.bold : FontWeight.w500,
-                                      fontSize: 13,
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.w600,
+                                        color: isHovered
+                                            ? AppTheme.accentDark
+                                            : AppTheme.textPrimary,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

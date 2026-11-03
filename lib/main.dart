@@ -20,8 +20,8 @@ class PortfolioApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Muhammad Waqas — Premium Flutter Portfolio',
-      theme: AppTheme.darkTheme,
+      title: 'Muhammad Waqas — Flutter Developer Portfolio',
+      theme: AppTheme.lightEditorialTheme,
       routerConfig: appRouter,
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,

@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../core/theme/app_theme.dart';
 
 class TechBadge extends StatelessWidget {
   final String label;
   final IconData? icon;
+  final bool isAccent;
 
   const TechBadge({
     super.key,
     required this.label,
     this.icon,
+    this.isAccent = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: AppTheme.primaryEmerald.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(30),
+        color: isAccent ? AppTheme.accentLight : AppTheme.surfaceSubtle,
+        borderRadius: BorderRadius.circular(6),
         border: Border.all(
-          color: AppTheme.primaryEmerald.withOpacity(0.25),
+          color: isAccent ? AppTheme.accentBorder : AppTheme.border,
           width: 1,
         ),
       ),
@@ -29,18 +32,21 @@ class TechBadge extends StatelessWidget {
           if (icon != null) ...[
             Icon(
               icon,
-              size: 14,
-              color: AppTheme.accentEmerald,
+              size: 13,
+              color: isAccent ? AppTheme.accent : AppTheme.textSecondary,
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 5),
           ],
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppTheme.textPrimary,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
+          Flexible(
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.jetBrainsMono(
+                color: isAccent ? AppTheme.accentDark : AppTheme.textPrimary,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w500,
+                letterSpacing: -0.2,
+              ),
             ),
           ),
         ],

@@ -1,6 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../core/theme/app_theme.dart';
 
+/// Editorial surface container replacing blurred glassmorphism with crisp,
+/// restrained architectural cards and hairline borders.
 class GlassContainer extends StatelessWidget {
   final Widget child;
   final double blur;
@@ -17,8 +19,8 @@ class GlassContainer extends StatelessWidget {
   const GlassContainer({
     super.key,
     required this.child,
-    this.blur = 16.0,
-    this.opacity = 0.06,
+    this.blur = 0.0,
+    this.opacity = 1.0,
     this.borderRadius,
     this.borderColor,
     this.bgColor,
@@ -31,40 +33,35 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRad = borderRadius ?? BorderRadius.circular(16);
-    final borderC = borderColor ?? Colors.white.withOpacity(0.12);
-    final bgC = bgColor ?? Colors.white.withOpacity(opacity);
+    final borderRad = borderRadius ?? BorderRadius.circular(10);
+    final effectiveBorder = borderColor ?? AppTheme.border;
+    final effectiveBg = bgColor ?? AppTheme.surface;
 
     return Container(
       margin: margin,
       width: width,
       height: height,
       decoration: BoxDecoration(
+        color: effectiveBg,
         borderRadius: borderRad,
-        boxShadow: boxShadow ?? [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        border: Border.all(
+          color: effectiveBorder,
+          width: 1,
+        ),
+        boxShadow: boxShadow ??
+            [
+              BoxShadow(
+                color: const Color(0xFF141518).withValues(alpha: 0.03),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
       ),
       child: ClipRRect(
         borderRadius: borderRad,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-          child: Container(
-            padding: padding,
-            decoration: BoxDecoration(
-              color: bgC,
-              borderRadius: borderRad,
-              border: Border.all(
-                color: borderC,
-                width: 1,
-              ),
-            ),
-            child: child,
-          ),
+        child: Padding(
+          padding: padding ?? EdgeInsets.zero,
+          child: child,
         ),
       ),
     );

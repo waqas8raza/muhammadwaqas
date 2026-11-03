@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/portfolio_data.dart';
-import '../../widgets/glass_container.dart';
-import '../../widgets/hover_item.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -12,254 +10,424 @@ class ExperienceSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 960;
-    final isMobile = screenWidth < 600;
+    final isMobile = screenWidth <= 640;
 
     final experience = PortfolioData.experiences.first;
 
-    // Sub-milestones derived from the projects list to make the timeline look detailed and professional
-    final List<Map<String, dynamic>> milestones = [
+    final List<Map<String, dynamic>> freelanceProjects = [
       {
-        "year": "Feb 2024 - Present",
-        "title": "Flutter Developer",
-        "company": "Maxcore Technologies",
-        "description": "Building production-ready mobile applications using modern architectures and scalable systems. Developed and deployed 10+ cross-platform apps including ILM, Golden Hills, and Suraj Studio.",
+        "title": "Gateline / Hostline — USA Community Security",
+        "scope":
+            "Visitor pre-registration, automated gate logging, dynamic QR passes, and instant push notifications.",
       },
       {
-        "year": "Freelance",
-        "title": "Mobile App Developer",
-        "company": "Freelance Projects",
-        "description": "Developed Gateline/Hostline (USA Community Security) and Faster (Spain Delivery Ecosystem). Implemented real-time tracking, WebSocket connections, live Google Map routes, QR-based check-ins, and security automation.",
-      }
+        "title": "Faster — Spain Delivery Logistics Ecosystem",
+        "scope":
+            "Live courier tracking with WebSockets and Google Maps SDK, algorithmic driver dispatching, and background location services.",
+      },
+      {
+        "title": "ExtBuy / Sourcesin — Multi-Vendor eCommerce (Almarai KSA)",
+        "scope":
+            "Large-scale marketplace architecture with live delivery tracking, multi-vendor dashboards, and payment gateway integration.",
+      },
     ];
 
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1100),
+        constraints: const BoxConstraints(maxWidth: 1200),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 64 : 24,
-            vertical: 80,
+            horizontal: isDesktop ? 48 : 24,
+            vertical: isDesktop ? 72 : 48,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Section Header
-              Row(
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 4,
                 children: [
-                  Container(
-                    width: 24,
-                    height: 2,
-                    color: AppTheme.accentEmerald,
+                  Text(
+                    "03",
+                    style: GoogleFonts.jetBrainsMono(
+                      color: AppTheme.accent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    "TIMELINE",
-                    style: TextStyle(
-                      color: AppTheme.accentEmerald,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
+                  Container(width: 16, height: 1, color: AppTheme.borderStrong),
+                  Text(
+                    "PROFESSIONAL TRACK RECORD",
+                    style: GoogleFonts.jetBrainsMono(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.6,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
+
               Text(
                 "Work Experience",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontSize: isMobile ? 28 : 36,
-                      fontWeight: FontWeight.w800,
+                      fontSize: isMobile ? 32 : 40,
                     ),
               ),
-              const SizedBox(height: 20),
-
-              // Overview Description
-              GlassContainer(
-                padding: const EdgeInsets.all(24),
-                borderRadius: BorderRadius.circular(20),
-                opacity: 0.05,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.work_history_rounded,
-                      color: AppTheme.accentEmerald,
-                      size: 28,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            experience.role,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            experience.description,
-                            style: const TextStyle(
-                              color: AppTheme.textSecondary,
-                              fontSize: 15,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 12),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 720),
+                child: Text(
+                  "A chronological log of production roles, enterprise engineering responsibilities, and key accomplishments delivered in industry teams.",
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppTheme.textSecondary,
+                    fontSize: 15,
+                    height: 1.6,
+                  ),
                 ),
               ),
               const SizedBox(height: 48),
 
-              // Vertical Timeline UI
-              AnimationLimiter(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: milestones.length,
-                  itemBuilder: (context, index) {
-                    final mile = milestones[index];
-
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 600),
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: IntrinsicHeight(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                // Left column: Timeline node line and glow dot
-                                Container(
-                                  width: 40,
-                                  child: Column(
-                                    children: [
-                                      // Top line
-                                      Expanded(
-                                        child: Container(
-                                          width: 2,
-                                          color: index == 0
-                                              ? Colors.transparent
-                                              : AppTheme.primaryEmerald.withOpacity(0.3),
-                                        ),
-                                      ),
-                                      // Glowing bullet point
-                                      Container(
-                                        width: 16,
-                                        height: 16,
-                                        decoration: const BoxDecoration(
-                                          color: AppTheme.accentEmerald,
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: AppTheme.accentEmerald,
-                                              blurRadius: 10,
-                                              spreadRadius: 2,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      // Bottom line
-                                      Expanded(
-                                        child: Container(
-                                          width: 2,
-                                          color: index == milestones.length - 1
-                                              ? Colors.transparent
-                                              : AppTheme.primaryEmerald.withOpacity(0.3),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-
-                                // Right column: Timeline card details
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 24),
-                                    child: HoverItem(
-                                      scale: 1.01,
-                                      builder: (context, isHovered) => GlassContainer(
-                                        padding: const EdgeInsets.all(24),
-                                        borderRadius: BorderRadius.circular(20),
-                                        opacity: isHovered ? 0.1 : 0.06,
-                                        borderColor: isHovered
-                                            ? AppTheme.accentEmerald.withOpacity(0.3)
-                                            : Colors.white.withOpacity(0.08),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // Period / Year badge
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 12, vertical: 6),
-                                              decoration: BoxDecoration(
-                                                color: AppTheme.primaryEmerald.withOpacity(0.12),
-                                                borderRadius: BorderRadius.circular(30),
-                                              ),
-                                              child: Text(
-                                                mile['year'],
-                                                style: const TextStyle(
-                                                  color: AppTheme.accentEmerald,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            // Title & Company
-                                            Text(
-                                              mile['title'],
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              mile['company'],
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                color: AppTheme.accentEmerald.withOpacity(0.85),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            // Description
-                                            Text(
-                                              mile['description'],
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: AppTheme.textSecondary,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+              // Timeline Item 1: Maxcore Technologies
+              Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF141518).withValues(alpha: 0.03),
+                      blurRadius: 14,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
+                padding: EdgeInsets.all(isDesktop ? 36 : 24),
+                child: isDesktop
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildMaxcoreRoleHeader(experience, isDesktop),
+                          Container(
+                            width: 1,
+                            height: 200,
+                            margin: const EdgeInsets.symmetric(horizontal: 32),
+                            color: AppTheme.border,
+                          ),
+                          Expanded(
+                            child: _buildMaxcoreDetails(experience),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildMaxcoreRoleHeader(experience, isDesktop),
+                          const SizedBox(height: 20),
+                          const Divider(),
+                          const SizedBox(height: 20),
+                          _buildMaxcoreDetails(experience),
+                        ],
+                      ),
+              ),
+              const SizedBox(height: 24),
+
+              // Timeline Item 2: Freelance & Contract Engineering
+              Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF141518).withValues(alpha: 0.03),
+                      blurRadius: 14,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.all(isDesktop ? 36 : 24),
+                child: isDesktop
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildFreelanceRoleHeader(isDesktop),
+                          Container(
+                            width: 1,
+                            height: 200,
+                            margin: const EdgeInsets.symmetric(horizontal: 32),
+                            color: AppTheme.border,
+                          ),
+                          Expanded(
+                            child: _buildFreelanceDetails(freelanceProjects),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildFreelanceRoleHeader(isDesktop),
+                          const SizedBox(height: 20),
+                          const Divider(),
+                          const SizedBox(height: 20),
+                          _buildFreelanceDetails(freelanceProjects),
+                        ],
+                      ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMaxcoreRoleHeader(dynamic experience, bool isDesktop) {
+    return SizedBox(
+      width: isDesktop ? 300 : double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppTheme.accentLight,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppTheme.accentBorder),
+            ),
+            child: Text(
+              "CURRENT ROLE",
+              style: GoogleFonts.jetBrainsMono(
+                color: AppTheme.accentDark,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            "Maxcore Technologies",
+            style: GoogleFonts.newsreader(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+              letterSpacing: -0.4,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "Flutter Developer",
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.accent,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_today_outlined,
+                size: 13,
+                color: AppTheme.textMuted,
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  experience.duration,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: 12,
+                    color: AppTheme.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMaxcoreDetails(dynamic experience) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          experience.description,
+          style: GoogleFonts.plusJakartaSans(
+            color: AppTheme.textSecondary,
+            fontSize: 14.5,
+            height: 1.6,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          "KEY ENGINEERING MILESTONES & ACHIEVEMENTS",
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textMuted,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...experience.achievements.map((ach) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.accent,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    ach,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      color: AppTheme.textPrimary,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildFreelanceRoleHeader(bool isDesktop) {
+    return SizedBox(
+      width: isDesktop ? 300 : double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppTheme.border),
+            ),
+            child: Text(
+              "CONTRACT & INDEPENDENT",
+              style: GoogleFonts.jetBrainsMono(
+                color: AppTheme.textSecondary,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            "International Freelance",
+            style: GoogleFonts.newsreader(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+              letterSpacing: -0.4,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "Mobile Systems Specialist",
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_today_outlined,
+                size: 13,
+                color: AppTheme.textMuted,
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  "2024 - Present",
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: 12,
+                    color: AppTheme.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFreelanceDetails(List<Map<String, dynamic>> freelanceProjects) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Architected and deployed custom cross-platform systems for international clients across Spain, the United States, and Saudi Arabia, emphasizing real-time synchronization, QR verification, and geospatial tracking.",
+          style: GoogleFonts.plusJakartaSans(
+            color: AppTheme.textSecondary,
+            fontSize: 14.5,
+            height: 1.6,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          "KEY CONTRACT DELIVERIES",
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textMuted,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...freelanceProjects.map((proj) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  proj["title"]!,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  proj["scope"]!,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 13.5,
+                    color: AppTheme.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 }

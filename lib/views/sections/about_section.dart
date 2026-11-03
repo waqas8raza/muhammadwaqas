@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/portfolio_data.dart';
-import '../../widgets/glass_container.dart';
-import '../../widgets/hover_item.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -12,228 +10,103 @@ class AboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 960;
-    final isMobile = screenWidth < 600;
+    final isMobile = screenWidth <= 640;
 
-    // Define icons corresponding to each specialization in order
-    final List<IconData> specIcons = [
-      Icons.flutter_dash_rounded,
-      Icons.schema_rounded,
-      Icons.api_rounded,
-      Icons.sync_alt_rounded,
-      Icons.auto_awesome_rounded,
-      Icons.devices_other,
-      Icons.speed_rounded,
+    final List<Map<String, String>> engineeringTenets = [
+      {
+        "title": "Architectural Discipline",
+        "description":
+            "Clean separation between presentation, application state, and data layers for maintainable codebases.",
+      },
+      {
+        "title": "Fluid 60 FPS UI",
+        "description":
+            "Careful widget tree scoping, avoided unnecessary rebuilds, and smooth micro-interactions.",
+      },
+      {
+        "title": "Offline-Resilient State",
+        "description":
+            "Local persistence with SQLite / Hive and caching strategies so apps remain usable without internet.",
+      },
+      {
+        "title": "Production Reliability",
+        "description":
+            "Strict error handling, telemetry, and secure credential storage on iOS and Android devices.",
+      },
     ];
 
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1100),
+        constraints: const BoxConstraints(maxWidth: 1200),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 64 : 24,
-            vertical: 80,
+            horizontal: isDesktop ? 48 : 24,
+            vertical: isDesktop ? 72 : 48,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Section Header
-              AnimationLimiter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: AnimationConfiguration.toStaggeredList(
-                    duration: const Duration(milliseconds: 500),
-                    childAnimationBuilder: (widget) => SlideAnimation(
-                      horizontalOffset: -50.0,
-                      child: FadeInAnimation(child: widget),
-                    ),
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 2,
-                            color: AppTheme.accentEmerald,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text(
-                            "ABOUT ME",
-                            style: TextStyle(
-                              color: AppTheme.accentEmerald,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        "Who I Am",
-                        style: Theme.of(context).textTheme.displayMedium
-                            ?.copyWith(
-                              fontSize: isMobile ? 28 : 36,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Main Narrative & Visual Grid layout
-              Flex(
-                direction: isDesktop ? Axis.horizontal : Axis.vertical,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // Category Marker
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 4,
                 children: [
-                  // Biography Block
-                  Expanded(
-                    flex: isDesktop ? 5 : 0,
-                    child: GlassContainer(
-                      padding: const EdgeInsets.all(28),
-                      borderRadius: BorderRadius.circular(24),
-                      opacity: 0.08,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "My Journey",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            PortfolioData.aboutText,
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  color: AppTheme.textSecondary,
-                                  fontSize: 16,
-                                  height: 1.6,
-                                ),
-                          ),
-                          const SizedBox(height: 24),
-                          // Stat badges
-                          Row(
-                            children: [
-                              _buildStat(context, "2+", "Years Exp"),
-                              const SizedBox(width: 32),
-                              _buildStat(context, "13+", "Projects Built"),
-                              const SizedBox(width: 32),
-                              _buildStat(context, "100%", "Quality Deliveries"),
-                            ],
-                          ),
-                        ],
-                      ),
+                  Text(
+                    "04",
+                    style: GoogleFonts.jetBrainsMono(
+                      color: AppTheme.accent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-
-                  if (isDesktop)
-                    const SizedBox(width: 40)
-                  else
-                    const SizedBox(height: 40),
-
-                  // Specializations Grid Block
-                  Expanded(
-                    flex: isDesktop ? 6 : 0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0, bottom: 16.0),
-                          child: Text(
-                            "Specializations",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: PortfolioData.specializations.length,
-                          itemBuilder: (context, index) {
-                            final spec = PortfolioData.specializations[index];
-                            final icon = index < specIcons.length
-                                ? specIcons[index]
-                                : Icons.check_circle_outline;
-
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: HoverItem(
-                                scale: 1.02,
-                                offset: const Offset(
-                                  4,
-                                  0,
-                                ), // slide right slightly
-                                builder: (context, isHovered) => GlassContainer(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 14,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                  opacity: isHovered ? 0.12 : 0.06,
-                                  borderColor: isHovered
-                                      ? AppTheme.accentEmerald.withOpacity(0.4)
-                                      : Colors.white.withOpacity(0.08),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: isHovered
-                                              ? AppTheme.primaryEmerald
-                                                    .withOpacity(0.25)
-                                              : AppTheme.primaryEmerald
-                                                    .withOpacity(0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          icon,
-                                          color: isHovered
-                                              ? AppTheme.accentEmerald
-                                              : Colors.white70,
-                                          size: 18,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: Text(
-                                          spec,
-                                          style: TextStyle(
-                                            color: isHovered
-                                                ? Colors.white
-                                                : AppTheme.textPrimary,
-                                            fontWeight: isHovered
-                                                ? FontWeight.w600
-                                                : FontWeight.w500,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 12,
-                                        color: isHovered
-                                            ? AppTheme.accentEmerald
-                                            : Colors.white24,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                  Container(width: 16, height: 1, color: AppTheme.borderStrong),
+                  Text(
+                    "PHILOSOPHY & BACKGROUND",
+                    style: GoogleFonts.jetBrainsMono(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.6,
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+
+              Text(
+                "Engineering Perspective",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      fontSize: isMobile ? 32 : 40,
+                    ),
+              ),
+              const SizedBox(height: 36),
+
+              // Asymmetrical 2-Column Editorial Spread
+              if (isDesktop)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: _buildPhilosophyColumn(engineeringTenets),
+                    ),
+                    const SizedBox(width: 48),
+                    Expanded(
+                      flex: 5,
+                      child: _buildBackgroundCard(isDesktop),
+                    ),
+                  ],
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPhilosophyColumn(engineeringTenets),
+                    const SizedBox(height: 36),
+                    _buildBackgroundCard(isDesktop),
+                  ],
+                ),
             ],
           ),
         ),
@@ -241,25 +114,230 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(BuildContext context, String value, String label) {
+  Widget _buildPhilosophyColumn(List<Map<String, String>> engineeringTenets) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            color: AppTheme.surfaceSubtle,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppTheme.border),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "“",
+                style: GoogleFonts.newsreader(
+                  fontSize: 48,
+                  color: AppTheme.accent,
+                  height: 0.8,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Great mobile software is built at the intersection of architectural discipline and tactile craft. Code should be maintainable; interfaces should feel instant.",
+                style: GoogleFonts.newsreader(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic,
+                  color: AppTheme.textPrimary,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 28),
+
+        Text(
+          "HOW I APPROACH SOFTWARE",
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textMuted,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        ...engineeringTenets.map((tenet) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: AppTheme.accentLight,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Icon(
+                      Icons.check_rounded,
+                      size: 14,
+                      color: AppTheme.accentDark,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tenet["title"]!,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        tenet["description"]!,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 13.5,
+                          color: AppTheme.textSecondary,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildBackgroundCard(bool isDesktop) {
+    return Container(
+      padding: EdgeInsets.all(isDesktop ? 32 : 24),
+      decoration: BoxDecoration(
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppTheme.border),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF141518).withValues(alpha: 0.03),
+            blurRadius: 14,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "About Muhammad Waqas",
+            style: GoogleFonts.newsreader(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+              letterSpacing: -0.3,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            PortfolioData.aboutText,
+            style: GoogleFonts.plusJakartaSans(
+              color: AppTheme.textSecondary,
+              fontSize: 14.5,
+              height: 1.65,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "Over the past two years, I have worked across full lifecycle deployments: translating product requirements into clean Dart architectures, integrating complex third-party SDKs, and publishing production builds to the Apple App Store, Google Play, and modern web environments.",
+            style: GoogleFonts.plusJakartaSans(
+              color: AppTheme.textSecondary,
+              fontSize: 14.5,
+              height: 1.65,
+            ),
+          ),
+          const SizedBox(height: 28),
+
+          Text(
+            "CORE SPECIALIZATIONS",
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textMuted,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: PortfolioData.specializations.map((spec) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceSubtle,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: AppTheme.border),
+                ),
+                child: Text(
+                  spec,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 28),
+          const Divider(),
+          const SizedBox(height: 20),
+
+          // Quick facts
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: 16,
+            runSpacing: 10,
+            children: [
+              _buildQuickFact("Current Base", "Pakistan"),
+              _buildQuickFact("Remote Work", "Worldwide"),
+              _buildQuickFact("Notice Period", "Immediate"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickFact(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          value,
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-            color: AppTheme.accentEmerald,
-            fontWeight: FontWeight.w900,
-            fontSize: 32,
+          label.toUpperCase(),
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: 10,
+            color: AppTheme.textMuted,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 2),
         Text(
-          label,
-          style: const TextStyle(
-            color: AppTheme.textSecondary,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+          value,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: AppTheme.textPrimary,
           ),
         ),
       ],
